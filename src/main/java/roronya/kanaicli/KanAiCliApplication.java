@@ -4,12 +4,15 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.Resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +28,18 @@ public class KanAiCliApplication implements CommandLineRunner {
 
     private final List<Message> conversationHistory = new ArrayList<>();
 
+    private String systemPrompt;
+
     @Autowired
-    public KanAiCliApplication(OpenAiChatModel openAiChatModel, OllamaChatModel ollamaChatModel) {
+    public KanAiCliApplication(
+            OpenAiChatModel openAiChatModel,
+            OllamaChatModel ollamaChatModel,
+            @Value("classpath:prompt.st") Resource promptResource
+    ) {
         this.openAiChatModel = openAiChatModel;
         this.ollamaChatModel = ollamaChatModel;
         chatClient = ChatClient.builder(openAiChatModel).build();
+        systemPrompt = new PromptTemplate(promptResource).render();
     }
 
     public static void main(String[] args) {
@@ -95,7 +105,7 @@ public class KanAiCliApplication implements CommandLineRunner {
             // Create a prompt with the conversation history
             String response = chatClient
                     .prompt()
-                    .system("You are a helpful assistant.")
+                    .system(systemPrompt)
                     .messages(conversationHistory)
                     .call()
                     .content();
