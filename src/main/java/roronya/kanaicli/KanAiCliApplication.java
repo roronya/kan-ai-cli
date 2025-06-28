@@ -66,8 +66,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                     break label;
                 case "\\history":
                     System.out.println("Conversation History:");
-                    for (int i = 0; i < conversationHistory.size(); i++) {
-                        Message message = conversationHistory.get(i);
+                    for (Message message : conversationHistory) {
                         if (message instanceof UserMessage) {
                             System.out.println("User: " + message);
                         } else if (message instanceof AssistantMessage) {
@@ -107,7 +106,6 @@ public class KanAiCliApplication implements CommandLineRunner {
                     .call()
                     .content();
 
-            // Create a prompt with the conversation history
             // Create a prompt with the conversation history
             conversationHistory.add(new UserMessage(input));
             if (response != null) {
