@@ -111,7 +111,9 @@ public class KanAiCliApplication implements CommandLineRunner {
                     .content();
 
             // Add assistant response to conversation history
-            conversationHistory.add(new AssistantMessage(response));
+            if (response != null) {
+                conversationHistory.add(new AssistantMessage(response));
+            }
 
             System.out.println(response);
         }
