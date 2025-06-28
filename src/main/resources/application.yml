@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: kan-ai-cli
+  main:
+    banner-mode: off
+    web-application-type: none
+    allow-circular-references: true
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o-mini
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: llama3.2
+    chat:
+      client:
+        enabled: false
+logging:
+  level:
+    root: ERROR

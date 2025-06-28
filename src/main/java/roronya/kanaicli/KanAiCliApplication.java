@@ -20,16 +20,16 @@ import java.util.Scanner;
 public class KanAiCliApplication implements CommandLineRunner {
 
     private ChatClient chatClient;
-    private final ChatClient openAiChatClient;
-    private final ChatClient ollamaChatClient;
+    private final OpenAiChatModel openAiChatModel;
+    private final OllamaChatModel ollamaChatModel;
 
     private final List<Message> conversationHistory = new ArrayList<>();
 
     @Autowired
-    public KanAiCliApplication(OpenAiChatModel openAiModel, OllamaChatModel ollamaModel) {
-        openAiChatClient = ChatClient.builder(openAiModel).build();
-        ollamaChatClient = ChatClient.builder(ollamaModel).build();
-        chatClient = openAiChatClient; // use openai as default
+    public KanAiCliApplication(OpenAiChatModel openAiChatModel, OllamaChatModel ollamaChatModel) {
+        this.openAiChatModel = openAiChatModel;
+        this.ollamaChatModel = ollamaChatModel;
+        chatClient = ChatClient.builder(openAiChatModel).build();
     }
 
     public static void main(String[] args) {
@@ -65,15 +65,21 @@ public class KanAiCliApplication implements CommandLineRunner {
                 continue;
             }
 
+            if (input.equals("\\models")) {
+                System.out.println(openAiChatModel.toString());
+                System.out.println(ollamaChatModel.toString());
+                continue;
+            }
+
             if (input.startsWith("\\model ")) {
                 String modelName = input.substring(7).trim().toLowerCase();
                 switch (modelName) {
                     case "openai":
-                        chatClient = openAiChatClient;
+                        chatClient = ChatClient.builder(openAiChatModel).build();
                         System.out.println("Switched to OpenAI model.");
                         break;
                     case "ollama":
-                        chatClient = ollamaChatClient;
+                        chatClient = ChatClient.builder(ollamaChatModel).build();
                         System.out.println("Switched to Ollama model.");
                         break;
                     default:
