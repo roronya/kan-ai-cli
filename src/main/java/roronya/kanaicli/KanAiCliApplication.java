@@ -28,7 +28,7 @@ public class KanAiCliApplication implements CommandLineRunner {
 
     private final List<Message> conversationHistory = new ArrayList<>();
 
-    private String systemPrompt;
+    private final String systemPrompt;
 
     @Autowired
     public KanAiCliApplication(
