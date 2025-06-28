@@ -54,31 +54,31 @@ public class KanAiCliApplication implements CommandLineRunner {
         process.waitFor();
 
         Scanner scanner = new Scanner(System.in);
+        label:
         while (true) {
             System.out.print("> ");
             String input = scanner.nextLine();
 
-            if (input.equals("quit")) {
-                break;
-            }
-
-            if (input.equals("\\history")) {
-                System.out.println("Conversation History:");
-                for (int i = 0; i < conversationHistory.size(); i++) {
-                    Message message = conversationHistory.get(i);
-                    if (message instanceof UserMessage) {
-                        System.out.println("User: " + message);
-                    } else if (message instanceof AssistantMessage) {
-                        System.out.println("Assistant: " + message);
+            switch (input) {
+                case "":
+                    continue;
+                case "quit":
+                    break label;
+                case "\\history":
+                    System.out.println("Conversation History:");
+                    for (int i = 0; i < conversationHistory.size(); i++) {
+                        Message message = conversationHistory.get(i);
+                        if (message instanceof UserMessage) {
+                            System.out.println("User: " + message);
+                        } else if (message instanceof AssistantMessage) {
+                            System.out.println("Assistant: " + message);
+                        }
                     }
-                }
-                continue;
-            }
-
-            if (input.equals("\\models")) {
-                System.out.println(openAiChatModel.toString());
-                System.out.println(ollamaChatModel.toString());
-                continue;
+                    continue;
+                case "\\models":
+                    System.out.println(openAiChatModel.toString());
+                    System.out.println(ollamaChatModel.toString());
+                    continue;
             }
 
             if (input.startsWith("\\model ")) {
@@ -99,18 +99,17 @@ public class KanAiCliApplication implements CommandLineRunner {
                 continue;
             }
 
-            // Add user message to conversation history
-            conversationHistory.add(new UserMessage(input));
-
-            // Create a prompt with the conversation history
             String response = chatClient
                     .prompt()
                     .system(systemPrompt)
+                    .user(input)
                     .messages(conversationHistory)
                     .call()
                     .content();
 
-            // Add assistant response to conversation history
+            // Create a prompt with the conversation history
+            // Create a prompt with the conversation history
+            conversationHistory.add(new UserMessage(input));
             if (response != null) {
                 conversationHistory.add(new AssistantMessage(response));
             }
