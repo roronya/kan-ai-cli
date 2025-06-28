@@ -43,6 +43,19 @@ public class KanAiCliApplication implements CommandLineRunner {
                 break;
             }
 
+            if (input.equals("\\history")) {
+                System.out.println("Conversation History:");
+                for (int i = 0; i < conversationHistory.size(); i++) {
+                    Message message = conversationHistory.get(i);
+                    if (message instanceof UserMessage) {
+                        System.out.println("User: " + message.toString());
+                    } else if (message instanceof AssistantMessage) {
+                        System.out.println("Assistant: " + message.toString());
+                    }
+                }
+                continue;
+            }
+
             // Add user message to conversation history
             conversationHistory.add(new UserMessage(input));
 
