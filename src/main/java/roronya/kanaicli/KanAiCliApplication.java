@@ -13,9 +13,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.Resource;
+import roronya.kanaicli.tool.DateTimeTool;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -39,7 +41,9 @@ public class KanAiCliApplication implements CommandLineRunner {
         this.openAiChatModel = openAiChatModel;
         this.ollamaChatModel = ollamaChatModel;
         chatClient = ChatClient.builder(openAiChatModel).build();
-        systemPrompt = new PromptTemplate(promptResource).render();
+        systemPrompt = new PromptTemplate(promptResource)
+                .create(Map.of("format", "json"))
+                .getContents();
     }
 
     public static void main(String[] args) {
@@ -102,6 +106,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                     .prompt()
                     .system(systemPrompt)
                     .user(input)
+                    .tools(new DateTimeTool())
                     .messages(conversationHistory)
                     .call()
                     .content();

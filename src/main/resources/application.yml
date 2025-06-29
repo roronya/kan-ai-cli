@@ -20,4 +20,4 @@ spring:
         enabled: false
 logging:
   level:
-    root: ERROR
+    root: DEBUG
