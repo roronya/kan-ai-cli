@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.Resource;
 import roronya.kanaicli.tool.DateTimeTool;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,10 +53,15 @@ public class KanAiCliApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        ProcessBuilder processBuilder = new ProcessBuilder("oh-my-logo", "KAN AI CLI", "--filled", "--color");
-        processBuilder.inheritIO();
-        Process process = processBuilder.start();
-        process.waitFor();
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("oh-my-logo", "KAN AI CLI", "--filled", "--color");
+            processBuilder.inheritIO();
+            Process process = processBuilder.start();
+            process.waitFor();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
 
         Scanner scanner = new Scanner(System.in);
         label:
