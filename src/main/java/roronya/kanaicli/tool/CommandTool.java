@@ -12,9 +12,12 @@ public class CommandTool {
             name = "command_executor",
             description = """
                     Execute given command.
+                    Command shoud be split.
+                    For exampmle "ls -al" should be String[]{"ls", "-al"}.
                     Response is command's result.
                     """)
     public String execute(String[] command) {
+        System.out.println("Executing command: " + String.join(" ", command));
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             processBuilder.redirectErrorStream(true); // Redirect error stream to output stream
