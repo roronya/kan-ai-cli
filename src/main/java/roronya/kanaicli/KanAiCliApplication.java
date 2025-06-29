@@ -13,6 +13,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.Resource;
+import roronya.kanaicli.tool.CommandTool;
 import roronya.kanaicli.tool.DateTimeTool;
 
 import java.io.IOException;
@@ -112,7 +113,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                     .prompt()
                     .system(systemPrompt)
                     .user(input)
-                    .tools(new DateTimeTool())
+                    .tools(new DateTimeTool(), new CommandTool())
                     .messages(conversationHistory)
                     .call()
                     .content();
