@@ -67,7 +67,13 @@ public class KanAiCliApplication implements CommandLineRunner {
         label:
         while (true) {
             System.out.print("> ");
-            String input = scanner.nextLine();
+            String input;
+            try {
+                input = scanner.nextLine();
+            } catch (java.util.NoSuchElementException e) {
+                System.err.println("No input available. Exiting...");
+                break label;
+            }
 
             switch (input) {
                 case "":

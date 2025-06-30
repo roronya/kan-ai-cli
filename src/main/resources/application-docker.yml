@@ -12,7 +12,7 @@ spring:
         options:
           model: gpt-4o-mini
     ollama:
-      base-url: http://localhost:11434
+      base-url: http://ollama:11434
       chat:
         model: llama3.2
     chat:
@@ -27,13 +27,13 @@ management:
     enabled: true
   otlp:
     tracing:
-      endpoint: http://localhost:4318/v1/traces
+      endpoint: http://tempo:4318/v1/traces
 
 # OpenTelemetry configuration
 otel:
   exporter:
     otlp:
-      endpoint: http://localhost:4318
+      endpoint: http://tempo:4318
   traces:
     exporter: otlp
 
