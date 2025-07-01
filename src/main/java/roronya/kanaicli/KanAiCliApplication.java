@@ -139,6 +139,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                         System.out.println("Unknown model: " + modelName);
                         System.out.println("Available models: openai, ollama");
                 }
+                conversationHistory.clear(); // モデルを変えたらヒストリーをリセットする。(モデルの自認が壊れる)
                 continue;
             }
 
