@@ -63,7 +63,7 @@ public class KanAiCliApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("oh-my-logo", "KAN AI CLI", "--filled", "--color");
+            ProcessBuilder processBuilder = new ProcessBuilder("oh-my-logo", "KAN-AI-CLI", "--filled", "--color");
             processBuilder.inheritIO();
             Process process = processBuilder.start();
             process.waitFor();
@@ -81,7 +81,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                 input = scanner.nextLine();
             } catch (java.util.NoSuchElementException e) {
                 System.err.println("No input available. Exiting...");
-                break label;
+                break;
             }
 
             switch (input) {
