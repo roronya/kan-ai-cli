@@ -1,4 +1,4 @@
-package roronya.kanaicli.tool;
+package roronya.kanaicli;
 
 import org.springframework.ai.tool.annotation.Tool;
 

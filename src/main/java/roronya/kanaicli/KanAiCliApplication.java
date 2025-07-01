@@ -5,6 +5,7 @@ import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.Resource;
-import roronya.kanaicli.tool.CommandTool;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,20 +31,18 @@ public class KanAiCliApplication implements CommandLineRunner {
 
     private final List<Message> conversationHistory = new ArrayList<>();
 
-    private final String systemPrompt;
+    @Value("classpath:prompt.st")
+    Resource promptResource;
 
     @Autowired
     public KanAiCliApplication(
             OpenAiChatModel openAiChatModel,
-            OllamaChatModel ollamaChatModel,
-            @Value("classpath:prompt.st") Resource promptResource
+            OllamaChatModel ollamaChatModel
     ) {
         this.openAiChatModel = openAiChatModel;
         this.ollamaChatModel = ollamaChatModel;
         chatClient = ChatClient.builder(openAiChatModel).build();
-        systemPrompt = new PromptTemplate(promptResource)
-                .create(Map.of("format", "json"))
-                .getContents();
+
     }
 
     public static void main(String[] args) {
@@ -114,7 +112,14 @@ public class KanAiCliApplication implements CommandLineRunner {
                 continue;
             }
 
-            String response = chatClient
+            BeanOutputConverter<Response> converter = new BeanOutputConverter<>(Response.class);
+            String format = converter.getFormat();
+            String systemPrompt = new PromptTemplate(promptResource)
+                    .create(Map.of("format", format))
+                    .getContents();
+            System.out.println(format);
+
+            String rawResponse = chatClient
                     .prompt()
                     .system(systemPrompt)
                     .user(input)
@@ -123,13 +128,13 @@ public class KanAiCliApplication implements CommandLineRunner {
                     .call()
                     .content();
 
+            Response response = converter.convert(rawResponse);
+
             // Create a prompt with the conversation history
             conversationHistory.add(new UserMessage(input));
-            if (response != null) {
-                conversationHistory.add(new AssistantMessage(response));
-            }
+            conversationHistory.add(new AssistantMessage(rawResponse));
 
-            System.out.println(response);
+            System.out.println(response.whatLlmModelAreYou() + ": " + response.content());
         }
         scanner.close();
     }
