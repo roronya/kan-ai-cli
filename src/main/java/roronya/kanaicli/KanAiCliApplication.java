@@ -31,6 +31,10 @@ public class KanAiCliApplication implements CommandLineRunner {
     private final OllamaChatModel ollamaChatModel;
     private final VertexAiGeminiChatModel vertexAiGeminiChatModel;
 
+    private static final String BOLD = "\u001B[1m";
+    private static final String RESET = "\u001B[0m";
+
+
     private final List<Message> conversationHistory = new ArrayList<>();
 
     @Value("classpath:prompt.st")
@@ -45,7 +49,10 @@ public class KanAiCliApplication implements CommandLineRunner {
         this.vertexAiGeminiChatModel = vertexAiGeminiChatModel;
         this.openAiChatModel = openAiChatModel;
         this.ollamaChatModel = ollamaChatModel;
-        chatClient = ChatClient.builder(openAiChatModel).build();
+        chatClient = ChatClient.builder(openAiChatModel)
+                // .defaultAdvisors(new SimpleLoggerAdvisor())
+                .defaultAdvisors(new CustomLogAdvisor())
+                .build();
 
     }
 
@@ -126,7 +133,6 @@ public class KanAiCliApplication implements CommandLineRunner {
             String systemPrompt = new PromptTemplate(promptResource)
                     .create(Map.of("format", format))
                     .getContents();
-            System.out.println(format);
 
             String rawResponse = chatClient
                     .prompt()
@@ -143,7 +149,7 @@ public class KanAiCliApplication implements CommandLineRunner {
             conversationHistory.add(new UserMessage(input));
             conversationHistory.add(new AssistantMessage(rawResponse));
 
-            System.out.println(response.whatLlmModelAreYou() + ": " + response.content());
+            System.out.println(BOLD + response.whatLlmModelAreYou() + ": " + response.content() + RESET);
         }
         scanner.close();
     }
