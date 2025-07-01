@@ -18,6 +18,13 @@ spring:
     chat:
       client:
         enabled: false
+        observations:
+          log-prompt: true
+      observations:
+        include-error-logging: true
+        log-completion: true
+        log-prompt: true
+
 
 # Tracing configuration
 management:
@@ -40,5 +47,3 @@ otel:
 logging:
   level:
     root: ERROR
-    io.micrometer.tracing: INFO
-    io.opentelemetry: DEBUG
