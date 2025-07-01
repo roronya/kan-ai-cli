@@ -31,6 +31,7 @@ public class KanAiCliApplication implements CommandLineRunner {
     private final OllamaChatModel ollamaChatModel;
     private final VertexAiGeminiChatModel vertexAiGeminiChatModel;
 
+    public static final String RED = "\u001B[31m";
     private static final String BOLD = "\u001B[1m";
     private static final String RESET = "\u001B[0m";
 
@@ -159,14 +160,18 @@ public class KanAiCliApplication implements CommandLineRunner {
                     .call()
                     .content();
 
-            Response response = converter.convert(rawResponse);
+            try {
+                Response response = converter.convert(rawResponse);
 
-            // やり取りが終わったら会話履歴に保存
-            conversationHistory.add(new UserMessage(input));
-            conversationHistory.add(new AssistantMessage(rawResponse));
+                System.out.println(BOLD + response.content() + RESET);
+                System.out.println("（´-`）.｡oO(" + response.reasonWhyYouRespondThatContent() + ")");
 
-            System.out.println(BOLD + response.content() + RESET);
-            System.out.println("（´-`）.｡oO(" + response.reasonWhyYouRespondThatContent() + ")");
+                // やり取りが終わったら会話履歴に保存
+                conversationHistory.add(new UserMessage(input));
+                conversationHistory.add(new AssistantMessage(rawResponse));
+            } catch (RuntimeException e) {
+                System.out.println(RED + "ERROR!: got invalid response." + RESET);
+            }
         }
         scanner.close();
     }
