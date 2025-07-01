@@ -1,4 +1,4 @@
 package roronya.kanaicli;
 
-public record Response(String whatLlmModelAreYou, String content) {
+public record Response(String reasonWhyYouRespondThatContent, String content) {
 }

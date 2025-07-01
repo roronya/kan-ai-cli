@@ -163,7 +163,8 @@ public class KanAiCliApplication implements CommandLineRunner {
             conversationHistory.add(new UserMessage(input));
             conversationHistory.add(new AssistantMessage(rawResponse));
 
-            System.out.println(BOLD + response.whatLlmModelAreYou() + ": " + response.content() + RESET);
+            System.out.println(BOLD + response.content() + RESET);
+            System.out.println("（´-`）.｡oO(" + response.reasonWhyYouRespondThatContent() + ")");
         }
         scanner.close();
     }
