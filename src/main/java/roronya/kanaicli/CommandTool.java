@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 public class CommandTool {
     private Scanner scanner;
 
+    public static final String RESET = "\u001B[0m";
+    public static final String RED = "\u001B[31m";
+
     public CommandTool() {
         this.scanner = new Scanner(System.in);
     }
@@ -30,7 +33,7 @@ public class CommandTool {
                     """)
     public String execute(String[] command) {
         String commandStr = String.join(" ", command);
-        System.out.println("About to execute command: " + commandStr);
+        System.out.println(RED + "About to execute command: " + commandStr + RESET);
         System.out.print("Do you want to proceed? (y/n): ");
 
         String response = scanner.nextLine().trim().toLowerCase();
