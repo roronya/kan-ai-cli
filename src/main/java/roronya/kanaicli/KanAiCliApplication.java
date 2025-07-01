@@ -104,21 +104,35 @@ public class KanAiCliApplication implements CommandLineRunner {
                     System.out.println(openAiChatModel.toString());
                     System.out.println(ollamaChatModel.toString());
                     continue;
+                case "\\debug on":
+                    CustomLogAdvisor.setDebugEnabled(true);
+                    System.out.println("Debug logging enabled");
+                    continue;
+                case "\\debug off":
+                    CustomLogAdvisor.setDebugEnabled(false);
+                    System.out.println("Debug logging disabled");
+                    continue;
             }
 
             if (input.startsWith("\\model ")) {
                 String modelName = input.substring(7).trim().toLowerCase();
                 switch (modelName) {
                     case "gemini":
-                        chatClient = ChatClient.builder(vertexAiGeminiChatModel).build();
+                        chatClient = ChatClient.builder(vertexAiGeminiChatModel)
+                                .defaultAdvisors(new CustomLogAdvisor())
+                                .build();
                         System.out.println("Switched to Vertex AI model.");
                         break;
                     case "openai":
-                        chatClient = ChatClient.builder(openAiChatModel).build();
+                        chatClient = ChatClient.builder(openAiChatModel)
+                                .defaultAdvisors(new CustomLogAdvisor())
+                                .build();
                         System.out.println("Switched to OpenAI model.");
                         break;
                     case "ollama":
-                        chatClient = ChatClient.builder(ollamaChatModel).build();
+                        chatClient = ChatClient.builder(ollamaChatModel)
+                                .defaultAdvisors(new CustomLogAdvisor())
+                                .build();
                         System.out.println("Switched to Ollama model.");
                         break;
                     default:
