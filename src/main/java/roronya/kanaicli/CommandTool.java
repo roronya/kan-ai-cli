@@ -23,17 +23,15 @@ public class CommandTool {
         this.scanner = scanner;
     }
 
-    @Tool(
-            name = "command_executor",
-            description = """
-                    Executes the given shell command with user confirmation.
-
-                    The command must be provided as an array of strings where each element is a separate part of the command.
-                    For example, to run "ls -al", pass String[]{"ls", "-al"}.
-
-                    The tool will ask for confirmation before executing the command.
-                    Returns the command's output as a string, or an error message if execution fails.
-                    """)
+    @Tool(name = "command_executor", description = """
+            Executes the given shell command with user confirmation.
+            
+            The command must be provided as an array of strings where each element is a separate part of the command.
+            For example, to run "ls -al", pass String[]{"ls", "-al"}.
+            
+            The tool will ask for confirmation before executing the command.
+            Returns the command's output as a string, or an error message if execution fails.
+            """)
     public String execute(String[] command) {
         String commandStr = String.join(" ", command);
         System.out.println(RED + "About to execute command: " + commandStr + RESET);
