@@ -29,6 +29,7 @@ dependencies {
     // Observability dependencies
     implementation 'io.micrometer:micrometer-tracing-bridge-otel'
     implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
+    implementation 'org.springframework.ai:spring-ai-starter-model-vertex-ai-gemini'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

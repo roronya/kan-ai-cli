@@ -8,6 +8,7 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -28,6 +29,7 @@ public class KanAiCliApplication implements CommandLineRunner {
     private ChatClient chatClient;
     private final OpenAiChatModel openAiChatModel;
     private final OllamaChatModel ollamaChatModel;
+    private final VertexAiGeminiChatModel vertexAiGeminiChatModel;
 
     private final List<Message> conversationHistory = new ArrayList<>();
 
@@ -36,9 +38,11 @@ public class KanAiCliApplication implements CommandLineRunner {
 
     @Autowired
     public KanAiCliApplication(
+            VertexAiGeminiChatModel vertexAiGeminiChatModel,
             OpenAiChatModel openAiChatModel,
             OllamaChatModel ollamaChatModel
     ) {
+        this.vertexAiGeminiChatModel = vertexAiGeminiChatModel;
         this.openAiChatModel = openAiChatModel;
         this.ollamaChatModel = ollamaChatModel;
         chatClient = ChatClient.builder(openAiChatModel).build();
@@ -89,6 +93,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                     }
                     continue;
                 case "\\models":
+                    System.out.println(vertexAiGeminiChatModel.toString());
                     System.out.println(openAiChatModel.toString());
                     System.out.println(ollamaChatModel.toString());
                     continue;
@@ -97,6 +102,10 @@ public class KanAiCliApplication implements CommandLineRunner {
             if (input.startsWith("\\model ")) {
                 String modelName = input.substring(7).trim().toLowerCase();
                 switch (modelName) {
+                    case "gemini":
+                        chatClient = ChatClient.builder(vertexAiGeminiChatModel).build();
+                        System.out.println("Switched to Vertex AI model.");
+                        break;
                     case "openai":
                         chatClient = ChatClient.builder(openAiChatModel).build();
                         System.out.println("Switched to OpenAI model.");

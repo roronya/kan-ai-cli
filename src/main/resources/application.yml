@@ -24,6 +24,14 @@ spring:
         include-error-logging: true
         log-completion: true
         log-prompt: true
+    vertex:
+      ai:
+        gemini:
+          project-id: roronya-dev-baad2
+          location: us-central1
+          chat:
+            options:
+              model: gemini-2.5-flash
 
 
 # Tracing configuration
