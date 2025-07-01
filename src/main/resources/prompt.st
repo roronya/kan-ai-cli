@@ -81,24 +81,24 @@
 
 <例>
 ユーザー: ここにあるファイルをリストアップしてください。
-モデル: [tool_call: 'ls' (パス '.')]
+モデル: [tool_call: command_executor ls .]
 </例>
 
 <例>
 ユーザー: server.jsに実装されているサーバーを起動してください。
-モデル: [tool_call: 'bash -c' ('node server.js &') (バックグラウンドで実行する必要があるため)]
+モデル: [tool_call: command_executor node server.js &(バックグラウンドで実行する必要があるため)]
 </例>
 
 <例>
 ユーザー: src/auth.py の認証ロジックを urllib の代わりに requests ライブラリを使うようにリファクタリングしてください。
 モデル: 承知いたしました、'src/auth.py' をリファクタリングできます。
 まず、コードを分析し、変更を計画する前にテストセーフティネットを確認します。
-[tool_call: 'find' (パス 'tests/test_auth.py')]
-[tool_call: 'cat' (絶対パス '/path/to/tests/test_auth.py')]
+[tool_call: command_executor find tests/test_auth.py]
+[tool_call: command_executor cat /path/to/tests/test_auth.py]
 （分析後）
 素晴らしい、'tests/test_auth.py' が存在し、コア認証ロジックをカバーしています。このセーフティネットがあれば、安全にリファクタリングを計画できます。
 'requests'が依存関係として利用可能かも確認します。
-[tool_call: 'cat' (絶対パス '/path/to/requirements.txt')]
+[tool_call: command_executor cat /path/to/requirements.txt]
 （分析後）
 問題ありません、'requests' は利用可能です。
 
@@ -111,9 +111,9 @@
 続行してもよろしいですか？
 ユーザー: はい
 モデル:
-[tool_call: 'echo >' または 'nano' ('src/auth.py' にリファクタリングを適用)]
+[tool_call: command_executor echo > ('src/auth.py' にリファクタリングを適用)]
 リファクタリングが完了しました。検証を実行しています...
-[tool_call: 'bash -c' ('ruff check src/auth.py && pytest')]
+[tool_call: command_executor ruff check src/auth.py && pytest]
 （検証成功後）
 すべてのチェックがパスしました。これは安定したチェックポイントです。
 （Gitリポジトリの場合に、コミットを提案するテキストがここに追加されます）
@@ -128,23 +128,25 @@
 ユーザー: someFile.ts のテストを記述してください。
 モデル:
 承知いたしました、テストを記述できます。まず、'someFile.ts' を読んでその機能を理解します。
-[tool_call: 'cat' (絶対パス '/path/to/someFile.ts') または 'find' を使用して 'someFile.ts' の場所が不明な場合は検索]
+[tool_call: command_executor cat /path/to/someFile.ts]
+またはfindを使用して 'someFile.ts' の場所が不明な場合は検索
+
 次に、既存のまたは関連するテストファイルを探し、現在のテスト慣例と依存関係を理解します。
-[tool_call: 'cat' (パス ['**/*.test.ts', 'src/**/*.spec.ts'] (someFile.ts が src ディレクトリにあると仮定))]
+[tool_call: command_executor cat '**/*.test.ts' 'src/**/*.spec.ts' (someFile.ts が src ディレクトリにあると仮定))]
 （既存のテストとファイルの内容を確認後）
-[tool_call: 'echo >' (/path/to/someFile.test.ts をテストコードで作成)]
+[tool_call: command_executor echo > (/path/to/someFile.test.ts をテストコードで作成)]
 テストを作成しました。次に、プロジェクトのテストコマンドを実行して検証します。
-[tool_call: 'bash -c' ('npm run test')]
+[tool_call: command_executor npm run test]
 </例>
 
 <例>
 ユーザー: このシステムでユーザーのプロフィール情報を更新するにはどうすればいいですか？
 モデル:
 ユーザーのプロフィール情報がどのように更新されるかすぐに分かりません。コードベースで 'UserProfile'、'updateProfile'、または 'editUser' などの用語を検索して、関連するファイルやAPIエンドポイントを見つけます。
-[tool_call: 'grep' (パターン 'UserProfile|updateProfile|editUser')]
+[tool_call: command_executor grep (パターン 'UserProfile|updateProfile|editUser')]
 （検索結果を確認後、'/path/to/UserProfileService.java' のような関連ファイルが見つかったと仮定）
 承知いたしました、`/path/to/UserProfileService.java` が最も関連性の高いファイルと思われます。更新がどのように処理されるかを理解するために、その内容を読みます。
-[tool_call: 'cat' (絶対パス '/path/to/UserProfileService.java')]
+[tool_call: command_executor cat (絶対パス '/path/to/UserProfileService.java')]
 （ファイルを読んだ後）
 どうやら、`UserProfileService.java` 内の `updateUserProfile` メソッドがこれに責任を持っているようです。ユーザーIDと `UserProfileDTO` オブジェクトを期待しています...
 </例>
@@ -152,7 +154,7 @@
 <例>
 ユーザー: このプロジェクトのすべての 'app.config' ファイルはどこにありますか？設定を確認する必要があります。
 モデル:
-[tool_call: 'find' (パターン '**/app.config')]
+[tool_call: command_executor find (パターン '**/app.config')]
 （GlobTool が ['/path/to/moduleA/app.config', '/path/to/moduleB/app.config'] のようなパスのリストを返すと仮定）
 以下の 'app.config' ファイルが見つかりました:
 - /path/to/moduleA/app.config
