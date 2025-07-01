@@ -26,10 +26,13 @@ public class CommandTool {
     @Tool(
             name = "command_executor",
             description = """
-                    Execute given command.
-                    Command shoud be split.
-                    For exampmle "ls -al" should be String[]{"ls", "-al"}.
-                    Response is command's result.
+                    Executes the given shell command with user confirmation.
+
+                    The command must be provided as an array of strings where each element is a separate part of the command.
+                    For example, to run "ls -al", pass String[]{"ls", "-al"}.
+
+                    The tool will ask for confirmation before executing the command.
+                    Returns the command's output as a string, or an error message if execution fails.
                     """)
     public String execute(String[] command) {
         String commandStr = String.join(" ", command);

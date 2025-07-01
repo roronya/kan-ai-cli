@@ -35,6 +35,7 @@ public class KanAiCliApplication implements CommandLineRunner {
     private static final String RESET = "\u001B[0m";
 
 
+    // デモなのでオンメモリで管理しているが、単なる配列なのでRDBでもKVSとかに突っ込んで管理することもできる
     private final List<Message> conversationHistory = new ArrayList<>();
 
     @Value("classpath:prompt.st")
@@ -160,7 +161,7 @@ public class KanAiCliApplication implements CommandLineRunner {
 
             Response response = converter.convert(rawResponse);
 
-            // Create a prompt with the conversation history
+            // やり取りが終わったら会話履歴に保存
             conversationHistory.add(new UserMessage(input));
             conversationHistory.add(new AssistantMessage(rawResponse));
 
