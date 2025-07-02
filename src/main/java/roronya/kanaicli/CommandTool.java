@@ -24,26 +24,20 @@ public class CommandTool {
     }
 
     @Tool(name = "command_executor", description = """
-            Executes the given shell command with user confirmation.
-            
-            The command must be provided as an array of strings where each element is a separate part of the command.
-            For example, to run "ls -al", pass String[]{"ls", "-al"}.
-            
-            The tool will ask for confirmation before executing the command.
+            Executes the given shell command as bash -c argument.
             Returns the command's output as a string, or an error message if execution fails.
             """)
-    public String execute(String[] command) {
-        String commandStr = String.join(" ", command);
-        System.out.println(RED + "About to execute command: " + commandStr + RESET);
+    public String execute(String command) {
+        System.out.println(RED + "About to execute command: " + command + RESET);
         System.out.print("Do you want to proceed? (y/n): ");
 
         String response = scanner.nextLine().trim().toLowerCase();
         boolean proceed = response.equals("y") || response.equals("yes");
 
         if (proceed) {
-            System.out.println("Executing command: " + commandStr);
+            System.out.println("Executing command: bash -c " + command);
             try {
-                ProcessBuilder processBuilder = new ProcessBuilder(command);
+                ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", command);
                 processBuilder.redirectErrorStream(true); // Redirect error stream to output stream
                 Process process = processBuilder.start();
 
@@ -52,6 +46,7 @@ public class CommandTool {
                 String output = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 
                 process.waitFor();
+                System.out.println(output);
                 return output;
             } catch (IOException | InterruptedException e) {
                 String errorMessage = "Error executing command: " + e.getMessage();
