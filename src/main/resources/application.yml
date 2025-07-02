@@ -32,6 +32,12 @@ spring:
           chat:
             options:
               model: gemini-2.5-flash
+    mcp:
+      client:
+        sse:
+          connections:
+            server1:
+              url: http://localhost:8080
 
 
 # Tracing configuration
