@@ -1,6 +1,5 @@
 package roronya.kanaicli;
 
-import io.modelcontextprotocol.client.McpSyncClient;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
@@ -48,7 +47,8 @@ public class KanAiCliApplication implements CommandLineRunner {
     public KanAiCliApplication(
             VertexAiGeminiChatModel vertexAiGeminiChatModel,
             OpenAiChatModel openAiChatModel,
-            OllamaChatModel ollamaChatModel, ToolCallbackProvider tools
+            OllamaChatModel ollamaChatModel,
+            ToolCallbackProvider tools
     ) {
         this.vertexAiGeminiChatModel = vertexAiGeminiChatModel;
         this.openAiChatModel = openAiChatModel;
@@ -153,9 +153,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                     .create(Map.of("format", format))
                     .getContents();
 
-            McpSyncClient.
-
-                    String rawResponse = chatClient
+            String rawResponse = chatClient
                     .prompt()
                     .system(systemPrompt)
                     .user(input)
