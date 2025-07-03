@@ -31,6 +31,7 @@ public class KanAiCliApplication implements CommandLineRunner {
     private final OpenAiChatModel openAiChatModel;
     private final OllamaChatModel ollamaChatModel;
     private final VertexAiGeminiChatModel vertexAiGeminiChatModel;
+    private final ToolCallbackProvider tools;
 
     public static final String RED = "\u001B[31m";
     private static final String BOLD = "\u001B[1m";
@@ -58,6 +59,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                 .defaultAdvisors(new CustomLogAdvisor())
                 .defaultToolCallbacks(tools)
                 .build();
+        this.tools = tools;
     }
 
     public static void main(String[] args) {
@@ -124,18 +126,21 @@ public class KanAiCliApplication implements CommandLineRunner {
                     case "gemini":
                         chatClient = ChatClient.builder(vertexAiGeminiChatModel)
                                 .defaultAdvisors(new CustomLogAdvisor())
+                                .defaultToolCallbacks(tools)
                                 .build();
                         System.out.println("Switched to Vertex AI model.");
                         break;
                     case "openai":
                         chatClient = ChatClient.builder(openAiChatModel)
                                 .defaultAdvisors(new CustomLogAdvisor())
+                                .defaultToolCallbacks(tools)
                                 .build();
                         System.out.println("Switched to OpenAI model.");
                         break;
                     case "ollama":
                         chatClient = ChatClient.builder(ollamaChatModel)
                                 .defaultAdvisors(new CustomLogAdvisor())
+                                .defaultToolCallbacks(tools)
                                 .build();
                         System.out.println("Switched to Ollama model.");
                         break;
