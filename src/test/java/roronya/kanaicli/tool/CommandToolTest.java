@@ -21,8 +21,7 @@ class CommandToolTest {
         CommandTool commandTool = new CommandTool(createYesScanner());
 
         // Test with echo command
-        String[] echoCommand = {"echo", "Hello, World!"};
-        String result = commandTool.execute(echoCommand);
+        String result = commandTool.execute("echo Hello, World!");
 
         // The result should contain "Hello, World!"
         assertTrue(result.contains("Hello, World!"), "Echo command should return the input text");
@@ -33,8 +32,7 @@ class CommandToolTest {
         CommandTool commandTool = new CommandTool(createYesScanner());
 
         // Test with ls command
-        String[] lsCommand = {"ls", "-la"};
-        String result = commandTool.execute(lsCommand);
+        String result = commandTool.execute("ls -al");
 
         // The result should not be empty
         assertFalse(result.isEmpty(), "List command should return non-empty result");
@@ -45,10 +43,10 @@ class CommandToolTest {
         CommandTool commandTool = new CommandTool(createYesScanner());
 
         // Test with an invalid command
-        String[] invalidCommand = {"thisCommandDoesNotExist"};
+        String invalidCommand = "thisCommandDoesNotExist";
         String result = commandTool.execute(invalidCommand);
 
         // The result should contain an error message
-        assertTrue(result.contains("Error executing command"), "Invalid command should return an error message");
+        assertTrue(result.contains("command not found"), "Invalid command should return an error message");
     }
 }
