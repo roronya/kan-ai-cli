@@ -1,7 +1,7 @@
 package roronya.kanaicli;
 
 public record Response(
-        String reasonWhyYouRespondThatContent,
-        String content
+        String content,
+        String reason
 ) {
 }

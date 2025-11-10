@@ -32,31 +32,31 @@ spring:
           chat:
             options:
               model: gemini-2.5-flash
-    mcp:
-      client:
-        sse:
-          connections:
-            server1:
-              url: http://localhost:8080
+#    mcp:
+#      client:
+#        sse:
+#          connections:
+#            server1:
+#              url: http://localhost:8080
 
 
 # Tracing configuration
-management:
-  tracing:
-    sampling:
-      probability: 1.0
-    enabled: true
-  otlp:
-    tracing:
-      endpoint: http://localhost:4318/v1/traces
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#    enabled: true
+#  otlp:
+#    tracing:
+#      endpoint: http://localhost:4318/v1/traces
 
 # OpenTelemetry configuration
-otel:
-  exporter:
-    otlp:
-      endpoint: http://localhost:4318
-  traces:
-    exporter: otlp
+#otel:
+#  exporter:
+#    otlp:
+#      endpoint: http://localhost:4318
+#  traces:
+#    exporter: otlp
 
 logging:
   level:

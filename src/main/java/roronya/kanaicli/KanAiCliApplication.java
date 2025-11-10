@@ -171,7 +171,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                 Response response = converter.convert(rawResponse);
 
                 System.out.println(BOLD + response.content() + RESET);
-                System.out.println("（´-`）.｡oO(" + response.reasonWhyYouRespondThatContent() + ")");
+                System.out.println("（´-`）.｡oO(" + response.reason() + ")");
 
                 // やり取りが終わったら会話履歴に保存
                 conversationHistory.add(new UserMessage(input));
