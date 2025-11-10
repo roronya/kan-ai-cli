@@ -162,7 +162,7 @@ public class KanAiCliApplication implements CommandLineRunner {
                     .prompt()
                     .system(systemPrompt)
                     .user(input)
-                    .tools(new CommandTool())
+                    .tools(new CommandTool(), new TimeTool())
                     .messages(conversationHistory)
                     .call()
                     .content();
