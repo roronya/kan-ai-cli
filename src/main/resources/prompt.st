@@ -165,6 +165,7 @@
 モデル:
 [tool_call: command_executer echo -e "if __name__ == '__main__':  print('Hello World')" > hello.py]
 [tool_call: command_executer python3 hello.py]
+</例>
 
 
 # 最終的な注意
